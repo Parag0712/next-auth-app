@@ -1,4 +1,5 @@
 "use client"
+import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -27,8 +28,8 @@ function Header() {
                 <div className="hidden grow items-start lg:flex">
                     <ul className="ml-12 inline-flex space-x-8">
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                href="/"
                                 className="inline-flex items-center text-sm font-semibold text-gray-800 hover:text-gray-900"
                             >
                                 Home
@@ -48,7 +49,7 @@ function Header() {
                                         <polyline points="6 9 12 15 18 9"></polyline>
                                     </svg>
                                 </span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <a
