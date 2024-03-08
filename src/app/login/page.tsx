@@ -1,38 +1,46 @@
 "use client"
-import Link from 'next/link'
-import React, { FormEvent, useEffect, useState } from 'react'
+import axios from 'axios';
+import Link from 'next/link';
+import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { user } from '../types/api';
+import { useRouter } from 'next/navigation';
 
 function Login() {
-
-    const [user,setUser] = useState<user>({
-        email:"",
-        password:"",
-        username:""
+    const router = useRouter();
+    const [user, setUser] = useState<user>({
+        email: "",
+        password: "",
     });
 
     const [buttonDisabled, setButtonDisable] = useState(true);
     const [loading, setLoading] = useState(false);
 
-    const loginHandler = async (e:FormEvent<HTMLFormElement>)=>{
+    const loginHandler = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
         try {
-            e.preventDefault();
-
-
-        } catch (error) {
-            
+            const res = await axios.post("/api/users/login", user);
+            console.log("Sign success", res.data);
+            toast.success(res.data.message);
+            router.push("/profile")
+        } catch (error: any) {
+            console.log(error);
+            toast.error(error.response.data.error || error);
+            setLoading(false);
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
-        if (user.email.length > 0 && user.username!.length > 0 && user.password.length > 0) {
+        if (user.email.length > 0 && user.password!.length > 0) {
             setButtonDisable(false)
         } else {
             setButtonDisable(true)
         }
     }, [user])
-    
+
     return (
         <>
             <section>
@@ -78,7 +86,7 @@ function Login() {
                                     <div className="mt-2">
                                         <input
                                             value={user.email}
-                                            onChange={(e)=>setUser({...user,email:e.target.value})}
+                                            onChange={(e) => setUser({ ...user, email: e.target.value })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="email"
                                             placeholder="Email"
@@ -106,7 +114,7 @@ function Login() {
                                     <div className="mt-2">
                                         <input
                                             value={user.password}
-                                            onChange={(e)=>setUser({...user,password:e.target.value})}
+                                            onChange={(e) => setUser({ ...user, password: e.target.value })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
                                             placeholder="Password"
@@ -115,10 +123,11 @@ function Login() {
                                 </div>
                                 <div>
                                     <button
+                                        disabled={buttonDisabled}
                                         type="submit"
-                                        className={`inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold  leading-7 text-white hover:bg-black/80 ${buttonDisabled?"opacity-50 cursor-not-allowed":""}`}
+                                        className={`inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold  leading-7 text-white hover:bg-black/80 ${buttonDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
-                                        {loading?"loading":"Sign In"}
+                                        {loading ? "loading" : "Sign In"}
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="16"
@@ -138,7 +147,7 @@ function Login() {
                                 </div>
                             </div>
                         </form>
-                        
+
                     </div>
                 </div>
             </section>
