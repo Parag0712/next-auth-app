@@ -1,13 +1,24 @@
 "use client"
-import React from 'react'
+import axios from 'axios'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 
 function page() {
+    const router = useRouter();
+    const [data, setData] = useState("");
     const logout = () => {
-
+        
     }
 
-    const getUserDetails = () => {
-
+    const getUserDetails = async () => {
+        try {
+            const res = await axios.get("/api/users/me")
+            setData(res.data.data._id)
+        } catch (error: any) {
+            console.log(error);
+        }
     }
 
     return (
@@ -15,7 +26,8 @@ function page() {
             <h1>Profile</h1>
             <hr />
             <p>Profile page</p>
-            <h2 className="p-1 rounded bg-green-500"></h2>
+            <h2 className="p-1 rounded bg-green-500">{data === 'nothing' ? "Nothing" : <Link href={`/profile/${data}`}>{data}
+            </Link>}</h2>
             <hr />
 
             <button
