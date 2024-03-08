@@ -2,22 +2,55 @@
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
+import { user } from '../types/api'
+import toast, { Toaster } from 'react-hot-toast'
 
 
 function Register() {
-    const [user,setUser] = useState<user>({
-        email:"",
-        password:"",
-        username:""
+    const router = useRouter();
+
+    const [user, setUser] = useState<user>({
+        email: "",
+        password: "",
+        username: ""
     })
-    
-    const registerHandler = (e:FormEvent<HTMLFormElement>)=>{
-        e.preventDefault()
+
+    const [buttonDisabled, setButtonDisable] = useState(true);
+    const [loading, setLoading] = useState(false);
+
+    const registerHandler = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true)
+        try {
+            const response = await axios.post("/api/users/register", user);
+            console.log("Sign success", response.data);
+            toast.success(response.data.message);
+            router.push("/profile");
+        } catch (error: any) {
+            console.log(error);
+            toast.error(error.response.data.error || error);
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
     }
-    return (    
+
+    useEffect(() => {
+        if (user.email.length > 0 && user.username!.length > 0 && user.password.length > 0) {
+            setButtonDisable(false)
+        } else {
+            setButtonDisable(true)
+        }
+    }, [user])
+
+    return (
         <section>
             <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+                <Toaster
+                    position="bottom-center"
+                    reverseOrder={false}
+                />
                 <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
                     <div className="mb-2 flex justify-center">
                         <svg
@@ -46,19 +79,19 @@ function Register() {
                             Login
                         </Link>
                     </p>
-                    <form  className="mt-8" onSubmit={registerHandler}>
+                    <form className="mt-8" onSubmit={registerHandler}>
                         <div className="space-y-5">
                             <div>
                                 <label
                                     htmlFor="name"
                                     className="text-base font-medium text-gray-900"
-                                >   
+                                >
                                     Username
                                 </label>
                                 <div className="mt-2">
                                     <input
                                         value={user.username}
-                                        onChange={(e)=>setUser({...user,username:e.target.value})}
+                                        onChange={(e) => setUser({ ...user, username: e.target.value })}
                                         className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                         type="text"
                                         placeholder="Username"
@@ -76,7 +109,7 @@ function Register() {
                                 <div className="mt-2">
                                     <input
                                         value={user.email}
-                                        onChange={(e)=>setUser({...user,email:e.target.value})}
+                                        onChange={(e) => setUser({ ...user, email: e.target.value })}
                                         className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                         type="email"
                                         placeholder="Email"
@@ -96,7 +129,7 @@ function Register() {
                                 <div className="mt-2">
                                     <input
                                         value={user.password}
-                                        onChange={(e)=>setUser({...user,password:e.target.value})}
+                                        onChange={(e) => setUser({ ...user, password: e.target.value })}
                                         className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                         type="password"
                                         placeholder="Password"
@@ -106,10 +139,11 @@ function Register() {
                             </div>
                             <div>
                                 <button
+                                    disabled={buttonDisabled}
                                     type="submit"
-                                    className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                                    className={`inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold  leading-7 text-white hover:bg-black/80 ${buttonDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                                 >
-                                    Create Account
+                                    {loading ? "loading" : "Create Account"}
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="16"

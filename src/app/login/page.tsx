@@ -1,7 +1,8 @@
 "use client"
 import Link from 'next/link'
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
+import { user } from '../types/api';
 
 function Login() {
 
@@ -11,11 +12,27 @@ function Login() {
         username:""
     });
 
-    const loginHandler = (e:FormEvent<HTMLFormElement>)=>{
-        e.preventDefault();
-        console.log(user);
-        
+    const [buttonDisabled, setButtonDisable] = useState(true);
+    const [loading, setLoading] = useState(false);
+
+    const loginHandler = async (e:FormEvent<HTMLFormElement>)=>{
+        try {
+            e.preventDefault();
+
+
+        } catch (error) {
+            
+        }
     }
+
+    useEffect(() => {
+        if (user.email.length > 0 && user.username!.length > 0 && user.password.length > 0) {
+            setButtonDisable(false)
+        } else {
+            setButtonDisable(true)
+        }
+    }, [user])
+    
     return (
         <>
             <section>
@@ -99,9 +116,9 @@ function Login() {
                                 <div>
                                     <button
                                         type="submit"
-                                        className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                                        className={`inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold  leading-7 text-white hover:bg-black/80 ${buttonDisabled?"opacity-50 cursor-not-allowed":""}`}
                                     >
-                                        Sign In{" "}
+                                        {loading?"loading":"Sign In"}
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="16"
