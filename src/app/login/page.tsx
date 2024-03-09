@@ -26,8 +26,9 @@ function Login() {
             router.push("/profile")
         } catch (error: any) {
             console.log(error);
-            toast.error(error.response.data.error || error);
+            toast.error(error?.response?.data?.error || error);
             setLoading(false);
+            
         } finally {
             setLoading(false)
         }

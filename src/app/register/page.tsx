@@ -25,8 +25,8 @@ function Register() {
         try {
             const response = await axios.post("/api/users/register", user);
             console.log("Sign success", response.data);
-            toast.success(response.data.message);
-            router.push("/profile");
+            toast.success("check mail box and verify your email & login");
+            router.push("/login");
         } catch (error: any) {
                 console.log(error);
                 toast.error(error.response.data.error || error);

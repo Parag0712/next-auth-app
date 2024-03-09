@@ -35,17 +35,11 @@ export async function POST(request:NextRequest){
             username:savedUser.email,
         }
 
-        const token = await jwt.sign(tokenData,process.env.TOKEN_SECRET!,{expiresIn:"1d"})
-        
         await sendEmail({email,emailType:"VERIFY",userId:savedUser._id});
 
         const response = NextResponse.json({
             message: "User created successfully",
             success: true,
-        })
-
-        response.cookies.set("token", token, {
-            httpOnly: true, 
         })
 
         return response;

@@ -3,6 +3,7 @@ import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from 'bcryptjs'
 import jwt from "jsonwebtoken";
+import { sendEmail } from "@/helpers/mailer";
 
 connect();
 export async function POST(request:NextRequest){
@@ -21,6 +22,12 @@ export async function POST(request:NextRequest){
         if(!validPassword){
             return NextResponse.json({error: "Invalid password"}, {status: 400})
         }
+
+        if(!user.isVerified){
+            await sendEmail({email,emailType:"VERIFY",userId:user._id});
+            return NextResponse.json({error: "Check Mail & Verify Your Email"}, {status: 400})
+        }
+
         const tokenData = {
             id:user._id,
             email:user.email,

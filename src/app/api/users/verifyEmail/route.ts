@@ -8,10 +8,9 @@ export async function POST(request: NextRequest) {
     try {
         const reqBody =await request.json();
         const {token} = reqBody;
-        console.log(reqBody);
 
         //find user base on token if found 
-        const user =await User.findOne({verifyToken:token,verifyTokenExpiry: {$gt: Date.now()}});
+        const user = await User.findOne({verifyToken:token,verifyTokenExpiry: {$gt: Date.now()}});
 
         // if not found then throw error
         if(!user){
