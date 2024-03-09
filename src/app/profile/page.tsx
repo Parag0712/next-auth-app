@@ -8,8 +8,14 @@ import toast from 'react-hot-toast'
 function page() {
     const router = useRouter();
     const [data, setData] = useState("");
-    const logout = () => {
-        
+    const logout = async () => {
+        try {
+            const res = await axios.get("/api/users/logout")
+            toast.success('Logout successful')
+            router.push('/login')
+        } catch (error: any) {
+            toast.error(error.response.data.error || error);
+        }
     }
 
     const getUserDetails = async () => {
@@ -17,6 +23,7 @@ function page() {
             const res = await axios.get("/api/users/me")
             setData(res.data.data._id)
         } catch (error: any) {
+            toast.error("Login Required")
             console.log(error);
         }
     }

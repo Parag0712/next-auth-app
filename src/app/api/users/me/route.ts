@@ -8,8 +8,6 @@ export async function GET(request: NextRequest) {
     try {
         const userId = await verifyToken(request);
         const user = await User.findOne({ _id: userId }).select("-password");
-
-        console.log(user);
         
         return NextResponse.json({
             message: "User found",
