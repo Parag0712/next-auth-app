@@ -5,23 +5,27 @@ import React, { FormEvent, useState } from 'react'
 import toast from 'react-hot-toast';
 
 function page() {
-    const [email, setEmail] = useState("");
+    
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = params.get("token");        
+
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-
     const router = useRouter();
+
     // submitHandler
     const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.post("/api/users/forgotPassword", { email: email });
-            console.log("Email Sended", res.data);
+            const res = await axios.post("/api/users/resetPassword", { password: password,token:urlToken });
             toast.success(res.data.message);
             router.push("/login");
         } catch (error: any) {
             console.log(error);
             toast.error(error?.response?.data?.error || error);
+            router.push("/login");
             setLoading(false);
         } finally {
             setLoading(false)
@@ -48,7 +52,7 @@ function page() {
                         </svg>
                     </div>
                     <h2 className="text-center text-2xl font-bold leading-tight text-black">
-                        Forgot Password
+                        Change Password
                     </h2>
 
                     <form onSubmit={submitHandler} method="POST" className="mt-8">
@@ -56,17 +60,17 @@ function page() {
                             <div>
                                 <div className="flex items-center justify-between">
                                     <label htmlFor="" className="text-base font-medium text-gray-900">
-                                        Email
+                                        password
                                     </label>
                                 </div>
                                 <div className="mt-2">
                                     <input
                                         className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                        type="email"
+                                        type="password"
                                         required
-                                        placeholder="Email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="Password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                     ></input>
                                 </div>
                             </div>
@@ -75,7 +79,7 @@ function page() {
                                     type="button"
                                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                 >
-                                    {loading ?"Loading":"Submit"}
+                                    {loading ?"loading":"Submit"}
                                 </button>
                             </div>
                         </div>

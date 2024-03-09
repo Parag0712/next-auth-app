@@ -104,7 +104,7 @@ function Login() {
                                             Password{" "}
                                         </label>
                                         <Link
-                                            href="#"
+                                            href="forgotpassword"
                                             title=""
                                             className="text-sm font-semibold text-black hover:underline"
                                         >

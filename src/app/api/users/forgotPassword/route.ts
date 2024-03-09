@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         
         await sendEmail({email,emailType:"RESET",userId:user._id});
 
+        
         //send response
         return NextResponse.json({
             message:"Password reset link sended",
