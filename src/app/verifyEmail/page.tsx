@@ -20,7 +20,7 @@ function verifyEmail() {
         } catch (error:any) {
             setError(true);
             router.push("/login");
-            toast.error("some   thing wrong try to login.");
+            toast.error("something wrong try to login.");
         }
     }
 
