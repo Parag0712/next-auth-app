@@ -1,13 +1,16 @@
 "use client"
 import axios from 'axios';
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
 function resetPassword() {
-    
-    const params = new URLSearchParams(window.location.search);
-    const urlToken = params.get("token");        
+    const [token,setToken] = useState("");
+    useEffect(()=>{
+        const params = new URLSearchParams(window.location.search);
+        const urlToken = params.get("token");        
+        setToken(urlToken!);
+    },[])
 
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -19,7 +22,7 @@ function resetPassword() {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.post("/api/users/resetPassword", { password: password,token:urlToken });
+            const res = await axios.post("/api/users/resetPassword", { password: password,token:token });
             toast.success(res.data.message);
             router.push("/login");
         } catch (error: any) {
