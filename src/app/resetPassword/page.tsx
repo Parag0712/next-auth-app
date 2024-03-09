@@ -4,7 +4,7 @@ import React, { FormEvent, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
-function page() {
+function resetPassword() {
     
     const params = new URLSearchParams(window.location.search);
     const urlToken = params.get("token");        
@@ -91,4 +91,4 @@ function page() {
     )
 }
 
-export default page
+export default resetPassword

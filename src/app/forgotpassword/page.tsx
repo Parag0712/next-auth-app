@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
-function page() {
+function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -85,4 +85,4 @@ function page() {
     )
 }
 
-export default page
+export default ForgotPassword
