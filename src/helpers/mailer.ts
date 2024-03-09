@@ -26,10 +26,12 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         let transport = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: 465,
+            secure: true, // use SSL
             auth: {
-                user: process.env.SMTP_USER!,
-                pass: process.env.SMTP_PASS!
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
             }
+            
         });
 
         const mailOption = {
@@ -45,6 +47,8 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         return mailResponse;
 
     } catch (error: any) {
+
+        console.log(error);
         throw new Error(error.message)
     }
 }
