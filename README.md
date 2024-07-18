@@ -30,5 +30,5 @@ This project is a Next.js application focused on authentication, using technolog
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Parag0712/next-app-appwrite.git](https://github.com/Parag0712/next-auth-app.git
+   git clone https://github.com/Parag0712/next-auth-app.git
    cd next-auth-app
